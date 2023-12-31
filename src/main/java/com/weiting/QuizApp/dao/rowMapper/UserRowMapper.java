@@ -1,4 +1,4 @@
-package com.weiting.QuizApp.dao;
+package com.weiting.QuizApp.dao.rowMapper;
 
 import com.weiting.QuizApp.domain.User;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,8 +17,8 @@ public class UserRowMapper implements RowMapper<User> {
         trainee.setPassword(rs.getString("password"));
         trainee.setFirstname(rs.getString("firstname"));
         trainee.setLastname(rs.getString("lastname"));
-
-
+        trainee.set_active(rs.getBoolean("is_active"));
+        trainee.set_admin(rs.getBoolean("is_admin"));
         return trainee;
     }
 }

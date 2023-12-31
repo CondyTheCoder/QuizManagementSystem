@@ -13,6 +13,7 @@ public class User {
     private String password;
     private String firstname;
     private String lastname;
-//    private boolean is_active;
-//    private boolean is_admin;
+    private boolean is_active;
+    private boolean is_admin;
+
 }

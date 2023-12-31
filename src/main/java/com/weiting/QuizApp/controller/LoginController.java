@@ -2,6 +2,7 @@ package com.weiting.QuizApp.controller;
 
 import com.weiting.QuizApp.domain.User;
 import com.weiting.QuizApp.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,10 @@ import java.util.Optional;
 
 @Controller
 public class LoginController {
+
     private final LoginService loginService;
 
+    @Autowired
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
@@ -23,10 +26,12 @@ public class LoginController {
     @GetMapping("/login")
     public String getLogin(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession(false);
-
+        model.addAttribute("onLoginPage", true);
+        System.out.println("In getLogin");
 //         redirect to /quiz if user is already logged in
         if (session != null && session.getAttribute("user") != null) {
-            return "redirect:/quiz";
+
+            return "redirect:/home";
         }
 
         return "login";
@@ -37,12 +42,15 @@ public class LoginController {
     public String postLogin(@RequestParam String email,
                             @RequestParam String password,
                             HttpServletRequest request) {
-
+        System.out.println("In postLogin");
         Optional<User> possibleUser = loginService.validateLogin(email, password);
 
         if(possibleUser.isPresent()) {
             HttpSession oldSession = request.getSession(false);
             // invalidate old session if it exists
+
+            User user = possibleUser.get();
+
             if (oldSession != null) oldSession.invalidate();
 
             // generate new session
@@ -50,8 +58,14 @@ public class LoginController {
 
             // store user details in session
             newSession.setAttribute("user", possibleUser.get());
+            newSession.setAttribute("firstname", possibleUser.get().getFirstname());
+            newSession.setAttribute("lastname", possibleUser.get().getLastname());
 
-            return "redirect:/quiz";
+            if(user.is_admin()) {
+                return "redirect:/admin-home";
+            } else {
+                return "redirect:/home";
+            }
         } else { // if user details are invalid
             return "login";
         }

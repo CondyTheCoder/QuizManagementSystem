@@ -1,6 +1,6 @@
 package com.weiting.QuizApp.service;
 
-import com.weiting.QuizApp.dao.UserDao;
+import com.weiting.QuizApp.dao.UserDAO;
 import com.weiting.QuizApp.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,10 +10,10 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserDao userDao;
+    private final UserDAO userDao;
 
     @Autowired
-    public UserService(UserDao userDao) { this.userDao = userDao; }
+    public UserService(UserDAO userDao) { this.userDao = userDao; }
 
     public void createNewUser(User user) {
         userDao.createNewUser(user);
@@ -27,7 +27,7 @@ public class UserService {
         return userDao.getAllUsers().stream()
                 .filter(a -> a.getId() == id)
                 .findFirst()
-                .orElse(new User(-1, "invalid email", "invalid password", "null", "null"));
+                .orElse(new User(-1, "invalid email", "invalid password", "null", "null", false, false));
     }
 
     public Optional<User> validateLogin(String email, String password) {
@@ -37,4 +37,11 @@ public class UserService {
                 .findAny();
     }
 
+    public void setUserAdmin(User user) {
+        userDao.setUserAdmin(user);
+    }
+
+    public void updateUser(User user) {
+        userDao.updateUser(user);
+    }
 }

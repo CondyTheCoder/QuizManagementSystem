@@ -2,6 +2,7 @@ package com.weiting.QuizApp.domain;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -10,8 +11,19 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class Question {
-    private int id;
+    private int question_id;
+    private int category_id;
     private String description;
-    private List<Choice> choices;
-    private int correctChoiceId;
+    private boolean is_active;
+    private List<Choice> choices; // Initialize the list
+
+
+    public void setChoice(List<Choice> choice) {
+        choices = new ArrayList<>(choice);
+    }
+
+    // Getter for the choices list
+    public List<Choice> getChoices() {
+        return choices;
+    }
 }

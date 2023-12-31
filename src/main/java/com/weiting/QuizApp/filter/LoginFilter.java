@@ -23,21 +23,40 @@ public class LoginFilter extends OncePerRequestFilter {
         HttpSession session = request.getSession(false);
 
         if (request.getRequestURI().endsWith("/register")) {
-            System.out.println("In RegisterFilter");
+//            System.out.println("In Registeration");
             // If it's the registration page, allow the request to proceed
             filterChain.doFilter(request, response);
-        } else {
-            System.out.println("In LoginFilter");
+        }else if(request.getRequestURI().endsWith("/contactus")) {
+//            System.out.println("In Contact us");
+            // If it's the registration page, allow the request to proceed
+            filterChain.doFilter(request, response);
+        }else if(request.getRequestURI().endsWith("/thankyou")){
+//            System.out.println("In thank you");
+            // If it's the registration page, allow the request to proceed
+            filterChain.doFilter(request, response);
+
+        }else if (request.getRequestURI().endsWith("/send-message")){
+//                System.out.println("In Send Message");
+                // Allow the request to proceed
+                filterChain.doFilter(request, response);
+
+        }else if(request.getRequestURI().endsWith("/quiz")){
+            filterChain.doFilter(request, response);
+        }else{
+//            System.out.println("In LoginFilter");
+//              System.out.println(" " + session.getId() + " " + session.getAttribute("user"));
             if (session != null && session.getAttribute("user") != null) {
+//                System.out.println("Quiz?");
                 filterChain.doFilter(request, response);
             } else {
-
+                System.out.println("Something wrong");
                 // redirect back to the login page if user is not logged in
                 response.sendRedirect("/login");
             }
         }
-
     }
+
+
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
